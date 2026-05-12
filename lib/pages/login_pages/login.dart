@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gatheringapp/components/customElevatedButton.dart';
 import 'package:gatheringapp/components/customLogin_Text_Field.dart';
+import 'package:gatheringapp/pages/home_pages/home_page.dart';
 import 'package:gatheringapp/pages/signup_pages/organizer_signup_page.dart';
 import 'package:gatheringapp/pages/signup_pages/user_signup_page.dart';
 
@@ -23,6 +25,7 @@ class Login extends State<LoginPage> {
     super.dispose();
   }
 
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width * 0.8;
@@ -187,6 +190,7 @@ class Login extends State<LoginPage> {
 
                 // Email and Password Text Fields
                 Form(
+                  key: formKey,
                   child: Column(
                     children: [
                       // Email Text Field
@@ -214,61 +218,75 @@ class Login extends State<LoginPage> {
                         obscureText: true,
                         controller: passController,
                       ),
+
+                      // Remember Me Checkbox and Sign in Button
+                      Row(
+                        children: [
+                          Checkbox(
+                            splashRadius: 10,
+                            value: isChecked,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                isChecked = !isChecked;
+                              });
+                            },
+                            fillColor: WidgetStateProperty.resolveWith((
+                              states,
+                            ) {
+                              if (states.contains(WidgetState.selected)) {
+                                return Theme.of(
+                                  context,
+                                ).colorScheme.surface; // checked
+                              }
+
+                              return Theme.of(
+                                context,
+                              ).colorScheme.surface; // unchecked
+                            }),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+
+                          Text(
+                            "Remember Me",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                      // Sign in Button
+                      Center(
+                        child: CustomElevatedButton(
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              // Handle sign-in logic here
+
+                              // check if email and password are correct (this is just a placeholder, replace with actual authentication logic)
+                              if (true) {
+                                // Navigate to the home page or dashboard
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomePage(),
+                                  ),
+                                );
+                              } else {
+                                // Show an error message
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Invalid email or password"),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          text: "Sign In",
+                        ),
+                      ),
                     ],
                   ),
                 ),
 
-                // Remember Me Checkbox and Sign in Button
-                Row(
-                  children: [
-                    Checkbox(
-                      splashRadius: 10,
-                      value: isChecked,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          isChecked = !isChecked;
-                        });
-                      },
-                      fillColor: WidgetStateProperty.resolveWith((states) {
-                        if (states.contains(WidgetState.selected)) {
-                          return Theme.of(
-                            context,
-                          ).colorScheme.surface; // checked
-                        }
-
-                        return Theme.of(
-                          context,
-                        ).colorScheme.surface; // unchecked
-                      }),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-
-                    Text("Remember Me", style: TextStyle(color: Colors.black)),
-                  ],
-                ),
-                // Sign in Button
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF4a7c59),
-                      minimumSize: Size(width, height * 0.75),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    child: Text(
-                      "Sign In",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
                 SizedBox(height: 20),
                 Container(
                   alignment: Alignment.bottomCenter,

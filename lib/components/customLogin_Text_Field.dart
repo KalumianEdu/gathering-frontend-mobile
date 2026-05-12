@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomloginTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -6,18 +7,28 @@ class CustomloginTextField extends StatelessWidget {
   final bool obscureText;
   final Function(String)? onChanged;
   final String? helperText;
+  final int? maxLength;
+  final int maxLines;
   const CustomloginTextField({
     super.key,
     required this.hintText,
     required this.obscureText,
     this.onChanged,
     this.helperText,
+    this.maxLength,
+    this.maxLines = 1,
     required this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      maxLength: maxLength,
+      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+      maxLines: maxLines,
+      onChanged: onChanged,
       style: TextStyle(color: Colors.black),
       decoration: InputDecoration(
         filled: true,
